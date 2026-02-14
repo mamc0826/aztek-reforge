@@ -15,7 +15,7 @@ function Show-Header {
     $OS = Get-CimInstance Win32_OperatingSystem
     Write-Host " CPU: $((Get-CimInstance Win32_Processor).Name)" -ForegroundColor Gray
     Write-Host " RAM: $([Math]::Round($OS.FreePhysicalMemory / 1MB, 1)) GB Free / $([Math]::Round($OS.TotalVisibleMemorySize / 1MB, 0)) GB Total" -ForegroundColor Gray
-    Write-Host " UI:  Classic Menu & More Pins Enabled" -ForegroundColor Gray
+    Write-Host " Status: A2K Guard Protected | Date: $(Get-Date -Format "dd-MMM-yy")" -ForegroundColor Gray
     Write-Host "-----------------------------------------------------" -ForegroundColor Cyan
     Write-Host ""
 }
@@ -59,6 +59,7 @@ switch ($choice) {
         powercfg /change sleep-timeout-ac 0
         powercfg /hibernate off
         Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Lock Screen" -Name "StatusAppAppUserModelId" -Value ""
+        Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338387Enabled" -Value 0
 
         # --- DNS & MOUSE ---
         Set-DnsClientServerAddress -InterfaceAlias (Get-NetAdapter | Where-Object {$Status -eq "Up"}).InterfaceAlias -ServerAddresses ("1.1.1.1","1.0.0.1") -ErrorAction SilentlyContinue
@@ -78,15 +79,33 @@ public class Wallpaper {
         Add-Type -TypeDefinition $code -ErrorAction SilentlyContinue
         [Wallpaper]::SystemParametersInfo(20, 0, $WallpaperPath, 3)
 
-        # --- ARSENAL ---
-        $Arsenal = @("Google.Chrome", "Brave.Brave", "Malwarebytes.Malwarebytes", "7zip.7zip", "Notepad++.Notepad++", "VideoLAN.VLC", "RevoUninstaller.RevoUninstaller", "AntibodySoftware.WizTree", "MiniTool.PartitionWizard", "Python.Python.3", "SumatraPDF.SumatraPDF")
-        foreach ($App in $Arsenal) { winget install --id $App --silent --accept-package-agreements --accept-source-agreements | Out-Null }
+        # --- A2K ARSENAL WITH DESCRIPTIONS ---
+        Write-Host "-> Deploying A2K Arsenal..." -ForegroundColor Cyan
+        $Arsenal = @(
+            @{ID="Google.Chrome"; Desc="Fast, secure web browser"},
+            @{ID="Brave.Brave"; Desc="Privacy-focused browser with ad-blocking"},
+            @{ID="Malwarebytes.Malwarebytes"; Desc="A2K Guard recommended antivirus"},
+            @{ID="7zip.7zip"; Desc="High-ratio file archiver/unzipper"},
+            @{ID="Notepad++.Notepad++"; Desc="Advanced source code editor"},
+            @{ID="VideoLAN.VLC"; Desc="Universal media player for all formats"},
+            @{ID="RevoUninstaller.RevoUninstaller"; Desc="Deep cleaner for removing stubborn apps"},
+            @{ID="AntibodySoftware.WizTree"; Desc="Fastest disk space analyzer"},
+            @{ID="MiniTool.PartitionWizard"; Desc="Hard drive & partition manager"},
+            @{ID="Python.Python.3"; Desc="Programming language for automation"},
+            @{ID="SumatraPDF.SumatraPDF"; Desc="Ultra-lightweight PDF reader"}
+        )
+
+        foreach ($App in $Arsenal) { 
+            Write-Host "   Installing $($App.ID): $($App.Desc)..." -ForegroundColor Gray
+            winget install --id $App.ID --silent --accept-package-agreements --accept-source-agreements | Out-Null 
+        }
         
         Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
         Write-Host "A2K System Reforged." -ForegroundColor Green
     }
     "2" {
         Show-Header
+        Write-Host "-> Running System Maintenance..." -ForegroundColor Cyan
         winget upgrade --all --silent --accept-package-agreements --accept-source-agreements
         echo y | chkdsk C: /f /r
         Write-Host "Maintenance Scheduled. Restart required for Disk Repair." -ForegroundColor Yellow
