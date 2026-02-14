@@ -6,6 +6,7 @@ $Host.UI.RawUI.WindowTitle = "A2K REFORGE™ | SYSTEM RECAST"
 # --- CONFIGURATION ---
 $WallpaperUrl = "https://raw.githubusercontent.com/mamc0826/a2k-site/master/assets/images/wall1.jpg"
 $WallpaperPath = "$env:USERPROFILE\Pictures\reforge_wallpaper.jpg"
+$WebUrl = "https://a2k.lat"
 
 function Show-Header {
     Clear-Host
@@ -15,7 +16,7 @@ function Show-Header {
     $OS = Get-CimInstance Win32_OperatingSystem
     Write-Host " CPU: $((Get-CimInstance Win32_Processor).Name)" -ForegroundColor Gray
     Write-Host " RAM: $([Math]::Round($OS.FreePhysicalMemory / 1MB, 1)) GB Free / $([Math]::Round($OS.TotalVisibleMemorySize / 1MB, 0)) GB Total" -ForegroundColor Gray
-    Write-Host " Status: A2K Guard Protected | Date: $(Get-Date -Format "dd-MMM-yy")" -ForegroundColor Gray
+    Write-Host " Status: A2K GUARD Active (Contest Integrity Mode)" -ForegroundColor Green
     Write-Host "-----------------------------------------------------" -ForegroundColor Cyan
     Write-Host ""
 }
@@ -25,6 +26,7 @@ Write-Host "[0] Create Restore Point (Manual)" -ForegroundColor Green
 Write-Host "[1] Full System Recast (The Works)" -ForegroundColor Yellow
 Write-Host "[2] Deep Maintenance (Winget, CHKDSK, Updates)" -ForegroundColor Yellow
 Write-Host "[3] System Activation Help (MAS)" -ForegroundColor Yellow
+Write-Host "[W] Visit A2K Portal (Web)" -ForegroundColor Cyan
 Write-Host "[ER] Emergency Recovery (Rollback)" -ForegroundColor White -BackgroundColor Red
 Write-Host "[Q] Exit" -ForegroundColor Red
 Write-Host ""
@@ -32,6 +34,15 @@ Write-Host ""
 $choice = Read-Host "Input System Command"
 
 switch ($choice) {
+    "W" {
+        # --- THANK YOU MESSAGE POPUP ---
+        $msg = "Thank you for using A2K Reforge!`n`nConnecting you to the A2K Portal for more tools and updates."
+        $wshell = New-Object -ComObject Wscript.Shell
+        $wshell.Popup($msg, 0, "A2K REFORGE", 64) | Out-Null
+        
+        Write-Host "Launching A2K Portal..." -ForegroundColor Cyan
+        Start-Process $WebUrl
+    }
     "0" {
         Show-Header
         Write-Host "Creating Safety Net..." -ForegroundColor Yellow
@@ -43,7 +54,7 @@ switch ($choice) {
         Show-Header
         Write-Host "[!] INITIATING FULL RECAST..." -ForegroundColor Red
         
-        # --- START MENU ---
+        # --- START MENU (More Pins) ---
         $StartPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
         Set-ItemProperty -Path $StartPath -Name "Start_Layout" -Value 1 
         Set-ItemProperty -Path $StartPath -Name "Start_TrackProgs" -Value 1
@@ -79,20 +90,20 @@ public class Wallpaper {
         Add-Type -TypeDefinition $code -ErrorAction SilentlyContinue
         [Wallpaper]::SystemParametersInfo(20, 0, $WallpaperPath, 3)
 
-        # --- A2K ARSENAL WITH DESCRIPTIONS ---
+        # --- A2K ARSENAL ---
         Write-Host "-> Deploying A2K Arsenal..." -ForegroundColor Cyan
         $Arsenal = @(
-            @{ID="Google.Chrome"; Desc="Fast, secure web browser"},
-            @{ID="Brave.Brave"; Desc="Privacy-focused browser with ad-blocking"},
-            @{ID="Malwarebytes.Malwarebytes"; Desc="A2K Guard recommended antivirus"},
-            @{ID="7zip.7zip"; Desc="High-ratio file archiver/unzipper"},
-            @{ID="Notepad++.Notepad++"; Desc="Advanced source code editor"},
-            @{ID="VideoLAN.VLC"; Desc="Universal media player for all formats"},
+            @{ID="Google.Chrome"; Desc="Standard web browser for platform access"},
+            @{ID="Brave.Brave"; Desc="Privacy browser to eliminate tracking interference"},
+            @{ID="Malwarebytes.Malwarebytes"; Desc="A2K Guard partner for anti-cheat environment stability"},
+            @{ID="7zip.7zip"; Desc="Archive management for contest file submissions"},
+            @{ID="Notepad++.Notepad++"; Desc="Advanced editor for checking contest scripts/logs"},
+            @{ID="VideoLAN.VLC"; Desc="Verify video-based contest entries and proof"},
             @{ID="RevoUninstaller.RevoUninstaller"; Desc="Deep cleaner for removing stubborn apps"},
             @{ID="AntibodySoftware.WizTree"; Desc="Fastest disk space analyzer"},
             @{ID="MiniTool.PartitionWizard"; Desc="Hard drive & partition manager"},
-            @{ID="Python.Python.3"; Desc="Programming language for automation"},
-            @{ID="SumatraPDF.SumatraPDF"; Desc="Ultra-lightweight PDF reader"}
+            @{ID="Python.Python.3"; Desc="Required for A2K Guard verification algorithms"},
+            @{ID="SumatraPDF.SumatraPDF"; Desc="Lightweight viewer for contest rules and terms"}
         )
 
         foreach ($App in $Arsenal) { 
@@ -101,7 +112,7 @@ public class Wallpaper {
         }
         
         Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
-        Write-Host "A2K System Reforged." -ForegroundColor Green
+        Write-Host "A2K System Reforged and Fair-Play Optimized." -ForegroundColor Green
     }
     "2" {
         Show-Header
