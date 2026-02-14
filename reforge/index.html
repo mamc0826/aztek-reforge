@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZTEK REFORGE™ | A2K TECHNOLOGY</title>
+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+        :root {
+            --gold: #D4AF37;
+            --dark-gold: #8B6B05;
+            --black: #050505;
+            --white: #ffffff;
+            --reforge-blue: #00d9ff;
+            --code-bg: #1a1a1a;
+            --code-border: #00d9ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Fixed Background */
+        .bg-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), 
+                        url('assets/images/COMINGSOON.JPG') no-repeat center center/cover;
+        }
+
+        .circuit-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image: radial-gradient(circle at 2px 2px, rgba(0, 217, 255, 0.05) 1px, transparent 0);
+            background-size: 30px 30px;
+        }
+
+        /* Header */
+        .header {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .reforge-logo {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.6));
+        }
+
+        .header h1 {
+            font-family: 'Orbitron';
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: var(--reforge-blue);
+            text-shadow: 0 0 25px rgba(0, 217, 255, 0.6);
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+        }
+
+        .header .tagline {
+            font-family: 'Rajdhani';
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .intro-text {
+            text-align: center;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 60px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Installation Section */
+        .install-section {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--reforge-blue);
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.2);
+        }
+
+        .install-title {
+            font-family: 'Orbitron';
+            font-size: 1.8rem;
+            color: var(--reforge-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+
+        .install-instructions {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .install-instructions ol {
+            padding-left: 20px;
+        }
+
+        .install-instructions li {
+            margin-bottom: 15px;
+        }
+
+        /* Code Block */
+        .code-container {
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .code-label {
+            font-family: 'Orbitron';
+            font-size: 0.9rem;
+            color: var(--reforge-blue);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            border: 2px solid var(--code-border);
+            border-radius: 6px;
+            padding: 25px;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-text {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            color: #00ff00;
+            word-break: break-all;
+            user-select: all;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--reforge-blue);
+            border: none;
+            padding: 12px 25px;
+            font-family: 'Orbitron';
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--black);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .copy-btn:hover {
+            background: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-btn.copied {
+            background: #00ff00;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(255, 69, 0, 0.1);
+            border: 2px solid #ff4500;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .warning-box h3 {
+            font-family: 'Orbitron';
+            color: #ff4500;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .warning-box p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 40px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Orbitron';
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .back-btn:hover {
+            background: var(--gold);
+            color: var(--black);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .reforge-logo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .install-section {
+                padding: 25px;
+            }
+
+            .code-text {
+                font-size: 0.9rem;
+            }
+
+            .copy-btn {
+                position: static;
+                width: 100%;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-wrapper"></div>
+    <div class="circuit-overlay"></div>
+
+    <header class="header">
+        <div class="logo-container">
+            <img src="assets/images/REFORGELOGO.png" alt="Aztek Reforge" class="reforge-logo">
+        </div>
+        <h1>AZTEK REFORGE™</h1>
+        <p class="tagline">System Recast for Peak Performance</p>
+    </header>
+
+    <div class="container">
+        <p class="intro-text">
+            Windows configuration and deployment toolkit designed to streamline setup and performance standards.
+            Execute the command below in PowerShell to begin the reforge process.
+        </p>
+
+        <div class="install-section">
+            <h2 class="install-title">INSTALLATION</h2>
+            
+            <div class="install-instructions">
+                <ol>
+                    <li>Open <strong>Windows PowerShell</strong> as Administrator</li>
+                    <li>Copy the command below by clicking the COPY button</li>
+                    <li>Paste and execute the command in PowerShell</li>
+                    <li>Follow the on-screen instructions</li>
+                </ol>
+            </div>
+
+            <div class="code-container">
+                <div class="code-label">POWERSHELL COMMAND:</div>
+                <div class="code-block">
+                    <code class="code-text" id="commandCode">irm http://a2k.lat/r | iex</code>
+                    <button class="copy-btn" onclick="copyCommand()">COPY</button>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ IMPORTANT</h3>
+                <p>
+                    Always run PowerShell as Administrator. This command downloads and executes a script 
+                    from a2k.lat. Ensure you trust the source before proceeding. The Reforge process will 
+                    modify system settings and configurations for optimal performance.
+                </p>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a href="/" class="back-btn">← BACK TO HOME</a>
+        </div>
+    </div>
+
+    <script>
+        function copyCommand() {
+            const codeText = document.getElementById('commandCode').textContent;
+            const copyBtn = document.querySelector('.copy-btn');
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(codeText).then(() => {
+                // Change button text and style
+                copyBtn.textContent = 'COPIED!';
+                copyBtn.classList.add('copied');
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    copyBtn.textContent = 'COPY';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = codeText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyBtn.textContent = 'COPIED!';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = 'COPY';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Fallback copy failed:', err);
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+    </script>
+</body>
+</html>
